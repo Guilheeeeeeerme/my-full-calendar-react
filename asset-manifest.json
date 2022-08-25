@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/my-full-calendar-react/static/css/main.e6c13ad2.css",
+    "main.js": "/my-full-calendar-react/static/js/main.5acada25.js",
+    "static/js/787.73385535.chunk.js": "/my-full-calendar-react/static/js/787.73385535.chunk.js",
+    "index.html": "/my-full-calendar-react/index.html",
+    "main.e6c13ad2.css.map": "/my-full-calendar-react/static/css/main.e6c13ad2.css.map",
+    "main.5acada25.js.map": "/my-full-calendar-react/static/js/main.5acada25.js.map",
+    "787.73385535.chunk.js.map": "/my-full-calendar-react/static/js/787.73385535.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.5acada25.js"
+  ]
+}
