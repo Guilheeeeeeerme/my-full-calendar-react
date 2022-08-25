@@ -4,8 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import App from "./App";
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import Expenses from "./routes/expenses";
-import Invoices from "./routes/invoices";
+import { MyFullCalendar } from './routes/my-full-calendar';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -13,10 +12,9 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />}>
-          <Route path="/" element={<Expenses />} />
-          <Route path="invoices" element={<Invoices />} />
-          <Route path="expenses" element={<Expenses />} />
-          <Route path="*" element={<Expenses />} />
+          <Route path="/" element={<MyFullCalendar />} />
+          <Route path="MyFullCalendar" element={<MyFullCalendar />} />
+          <Route path="*" element={<MyFullCalendar />} />
         </Route>
       </Routes>
     </BrowserRouter>

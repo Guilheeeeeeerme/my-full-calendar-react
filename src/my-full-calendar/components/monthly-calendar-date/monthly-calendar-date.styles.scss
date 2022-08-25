@@ -1,0 +1,51 @@
+.my-calendar-datebox {
+    display: flex; /* or inline-flex */
+    height: 100px;
+    max-height: 100px;
+    border: thin solid #7f7f7f;
+}
+
+.my-calendar-datebox.weekend {
+    background-color: rgba(233,233,233, 0.5);
+}
+
+.my-calendar-datebox.weekend p{
+    color: #2f74b5;
+}
+
+.my-calendar-datebox.not-month p{
+    opacity: 0.5;
+}
+
+.my-calendar-datebox p {
+    /* padding-right: 2px;
+    padding-left: 2px; */
+    /* margin: 2px; */
+    /* margin-left: 10px; */
+    /* display: inline-block; */
+    font-weight: bold;
+    font-size: 1em;
+}
+
+
+.my-calendar-datebox .reminders-container {
+    overflow: hidden;
+    margin: 10px 0px 0px 10px;
+}
+
+.my-calendar-datebox .date-label-container {
+    margin: 5px 0px 0px 5px;
+}
+
+.my-calendar-datebox .reminders-container .reminders-container-list .reminders-container-list-item {
+    margin: 0px;
+    font-size: 0.8em;
+}
+
+@media only screen and (max-width: 768px) {  
+
+    .my-calendar-datebox {
+        height: 50px;
+        max-height: 50px;
+    }
+}
