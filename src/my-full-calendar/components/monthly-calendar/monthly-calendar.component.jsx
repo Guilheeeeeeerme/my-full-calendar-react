@@ -12,7 +12,7 @@ export const MyFullCalendarMonthlyCalendar = ({ month, year }) => {
     if (year == null)
         throw '"year" is required';
 
-    const dateLabel = moment(new Date(year, month, 1)).format('MMMM YYYY');
+    const monthLabel = moment(new Date(year, month, 1)).format('MMMM YYYY');
 
     const weekDays = [
         'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
@@ -41,7 +41,7 @@ export const MyFullCalendarMonthlyCalendar = ({ month, year }) => {
     return (
         <div className="MyFullCalendarMonthlyCalendarContainer">
 
-            <h3> {dateLabel} </h3>
+            <h3> {monthLabel} </h3>
 
             <div className="MyFullCalendarMonthlyCalendarWeekdays">
                 {weekDays.map(weekDay => (

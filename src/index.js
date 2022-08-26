@@ -1,25 +1,30 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import App from "./App";
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import { MyFullCalendar } from './routes/my-full-calendar';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />}>
-          <Route path="/" element={<MyFullCalendar />} />
-          <Route path="MyFullCalendar" element={<MyFullCalendar />} />
-          <Route path="*" element={<MyFullCalendar />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <App />
   </React.StrictMode>
 );
+
+// root.render(
+//   <React.StrictMode>
+//     <BrowserRouter>
+//       <Routes>
+//         <Route path="/" element={<App />}>
+//           <Route path="/" element={<MyFullCalendar />} />
+//           <Route path="MyFullCalendar" element={<MyFullCalendar />} />
+//           <Route path="*" element={<MyFullCalendar />} />
+//         </Route>
+//       </Routes>
+//     </BrowserRouter>
+//   </React.StrictMode>
+// );
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

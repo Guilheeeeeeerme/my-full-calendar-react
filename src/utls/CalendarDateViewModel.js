@@ -5,6 +5,14 @@ export class CalendarDateViewModel {
     weekday = 0;
     month = 0;
     year = 0;
+
+    get key () {
+      return [
+        `${this.year}`.padStart(4, 0),
+        `${this.month}`.padStart(2, 0),
+        `${this.day}`.padStart(2, 0),
+      ].join('')
+    } 
   
     constructor(date, withinTheViewMonth) {
       this.withinTheViewMonth = withinTheViewMonth;
@@ -12,10 +20,6 @@ export class CalendarDateViewModel {
       this.weekday = date.getDay();
       this.month = date.getMonth();
       this.year = date.getFullYear();
-      this.key = [
-        `${this.year}`.padStart(4, 0),
-        `${this.month}`.padStart(2, 0),
-        `${this.day}`.padStart(2, 0),
-      ].join('')
+      
     }
   }

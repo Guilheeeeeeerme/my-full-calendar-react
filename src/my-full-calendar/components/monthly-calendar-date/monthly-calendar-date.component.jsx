@@ -5,17 +5,16 @@ export const MyFullCalendarMonthlyCalendarDate = ({ withinTheViewMonth, day, wee
 
     const isWeekend = !(weekday % 6);
 
-    function selectDate() {
+    const selectDate = () => {
 
     }
 
-    // "{'weekend': !(weekday % 6), 'not-month': !withinTheViewMonth }"
-
     return (
-        <div onClick={selectDate} className={`my-calendar-datebox ${isWeekend ? "weekend" : ""} ${!withinTheViewMonth ? "not-month" : ""}`}>
+        <div onClick={selectDate}
+            className={`my-calendar-datebox ${isWeekend ? "weekend" : ""} ${!withinTheViewMonth ? "not-month" : ""}`}>
 
             <div className="date-label-container">
-                <p className="date-label">{ day }</p>
+                <p className="date-label">{day}</p>
             </div>
 
             {/* <div class="reminders-container">
