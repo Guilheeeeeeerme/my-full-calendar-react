@@ -1,7 +1,6 @@
 import moment from "moment";
-import { Component } from "react";
 import { CalendarDateViewModel } from "../../../utls/CalendarDateViewModel";
-import { MyFullCalendarMonthlyCalendarDate } from "../monthly-calendar-date/monthly-calendar-date.component";
+import MyFullCalendarMonthlyCalendarDate from "../monthly-calendar-date/monthly-calendar-date.component";
 import './monthly-calendar.styles.scss';
 
 export const MyFullCalendarMonthlyCalendar = ({ month, year }) => {

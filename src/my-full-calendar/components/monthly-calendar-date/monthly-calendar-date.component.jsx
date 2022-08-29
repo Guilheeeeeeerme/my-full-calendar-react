@@ -1,23 +1,28 @@
-import './monthly-calendar-date.styles.scss'
+import { Component } from 'react';
+import './monthly-calendar-date.styles.scss';
 
 
-export const MyFullCalendarMonthlyCalendarDate = ({ withinTheViewMonth, day, weekday, month, year }) => {
+export default class MyFullCalendarMonthlyCalendarDate extends Component {
 
-    const isWeekend = !(weekday % 6);
 
-    const selectDate = () => {
+    render() {
 
-    }
+        const { withinTheViewMonth, day, weekday, month, year } = this.props;
+        const isWeekend = !(weekday % 6);
 
-    return (
-        <div onClick={selectDate}
-            className={`my-calendar-datebox ${isWeekend ? "weekend" : ""} ${!withinTheViewMonth ? "not-month" : ""}`}>
+        const selectDate = () => {
+            debugger;
+        }
 
-            <div className="date-label-container">
-                <p className="date-label">{day}</p>
-            </div>
+        return (
+            <div onClick={selectDate}
+                className={`my-calendar-datebox ${isWeekend ? "weekend" : ""} ${!withinTheViewMonth ? "not-month" : ""}`}>
 
-            {/* <div class="reminders-container">
+                <div className="date-label-container">
+                    <p className="date-label">{day}</p>
+                </div>
+
+                {/* <div class="reminders-container">
                 <div class="reminders-container-list">
                     <p class="reminders-container-list-item" *ngFor="let reminder of reminders"
                     [ngStyle]="{'color': reminder.color }">
@@ -27,7 +32,8 @@ export const MyFullCalendarMonthlyCalendarDate = ({ withinTheViewMonth, day, wee
                 </div>
             </div > */}
 
-        </div >
-    );
+            </div >
+        );
+    }
 
 }
