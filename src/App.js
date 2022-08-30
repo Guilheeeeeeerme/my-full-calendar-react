@@ -1,3 +1,8 @@
+import AddIcon from '@mui/icons-material/Add';
+import { Toolbar } from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
 import { Component } from "react";
 import { MyFullCalendarMonthlyCalendar } from "./my-full-calendar/components/monthly-calendar/monthly-calendar.component";
 
@@ -37,17 +42,25 @@ export default class App extends Component {
     const { currentMonth, currentFullYear } = this.state;
 
     return (
-      <main>
+      <Box>
 
-        <button onClick={this.goPreviousMonth}>Previous</button>
-        <button onClick={this.goNextMonth}>Next</button>
+        <Toolbar>
+          <ButtonGroup
+            variant="contained" aria-label="Month navigation buttons">
+            <Button onClick={this.goPreviousMonth} aria-label="Go to previous month navigation button">Previous</Button>
+            <Button onClick={this.goNextMonth} aria-label="Go to next month navigation button">Next</Button>
+          </ButtonGroup>
 
-        <MyFullCalendarMonthlyCalendar
-          month={currentMonth}
-          year={currentFullYear}
-        />
+        </Toolbar>
 
-      </main >
+        <main>
+          <MyFullCalendarMonthlyCalendar
+            month={currentMonth}
+            year={currentFullYear}
+          />
+        </main >
+
+      </Box>
     );
 
   }
