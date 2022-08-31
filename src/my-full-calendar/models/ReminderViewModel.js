@@ -2,7 +2,7 @@ export class ReminderViewModel {
 
   constructor(
     id,
-    reminder,
+    name,
     city,
     date,
     time,
@@ -11,7 +11,7 @@ export class ReminderViewModel {
   ) {
 
     this.id = id;
-    this.reminder = reminder;
+    this.name = name;
     this.city = city;
     this.date = date;
     this.time = time;

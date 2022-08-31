@@ -19,7 +19,11 @@ export const MyFullCalendarMonthlyCalendarDate = ({ withinTheViewMonth, day, wee
                 <p className="date-label">{day}</p>
             </div>
 
-            <MyFullCalendarMonthlyCalendarDateReminders />
+            <MyFullCalendarMonthlyCalendarDateReminders
+                day={day} 
+                month={month} 
+                year={year}
+            />
 
             {/*
             <div class="reminders-container">

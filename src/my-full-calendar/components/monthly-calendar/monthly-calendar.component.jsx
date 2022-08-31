@@ -55,8 +55,6 @@ export const MyFullCalendarMonthlyCalendar = ({ month, year }) => {
         setOpenAddReminder(false);
     };
 
-
-
     function getKey(dateInMonth) {
         return [
             `${dateInMonth.year}`.padStart(4, 0),
@@ -77,7 +75,7 @@ export const MyFullCalendarMonthlyCalendar = ({ month, year }) => {
 
             <div className="MyFullCalendarMonthlyCalendarWeekdays">
                 {weekDays.map(weekDay => (
-                    <div className="MyFullCalendarMonthlyCalendarWeekdayValue">{weekDay}</div>
+                    <div key={weekDay} className="MyFullCalendarMonthlyCalendarWeekdayValue">{weekDay}</div>
                 ))}
             </div>
 

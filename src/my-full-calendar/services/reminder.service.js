@@ -1,26 +1,35 @@
+import { lastValueFrom, of } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 
 const key = "my-reminders";
 
+function getAllReminders() {
+
+    let reminders = [];
+
+    try {
+        reminders = JSON.parse(localStorage.getItem(key));
+    } finally {
+        if (!reminders || !reminders.length)
+            reminders = [];
+    }
+
+    return reminders;
+
+}
+
+function postReminders(reminders) {
+    localStorage.setItem(key, JSON.stringify(reminders));
+}
+
+
 function sortReminders(dateA, dateB) {
 
-    if (+dateA.date.year > +dateB.date.year) {
+    if (dateA.date > dateB.date) {
         return 1;
     }
 
-    if (+dateA.date.month > +dateB.date.month) {
-        return 1;
-    }
-
-    if (+dateA.date.day > +dateB.date.day) {
-        return 1;
-    }
-
-    if (+dateA.time.hour > +dateB.time.hour) {
-        return 1;
-    }
-
-    if (+dateA.time.minute > +dateB.time.minute) {
+    if (dateA.time > dateB.time) {
         return 1;
     }
 
@@ -30,126 +39,66 @@ function sortReminders(dateA, dateB) {
 
 export function deleteReminder(reminderVm) {
 
-    return new Promise((resolve, reject) => {
-        try {
+    let reminders = getAllReminders();
 
-            let reminders = [];
-
-            try {
-                reminders = JSON.parse(localStorage.getItem(key));
-            } catch {
-                reminders = [];
-            }
-
-            if (!reminders || !reminders.length)
-                reminders = [];
-
-            reminders = reminders.filter((x) => {
-                return x.id != reminderVm.id;
-            })
-
-            localStorage.setItem(this.key, JSON.stringify(reminders));
-
-            resolve()
-        } catch (e) {
-            reject(e)
-        }
+    reminders = reminders.filter((x) => {
+        return x.id != reminderVm.id;
     })
+
+    postReminders(reminders);
 
 }
 
-export function updateReminder(reminderVm) {
+export function updateReminder(reminder) {
 
-    if (!reminderVm || !reminderVm.reminder)
-        throw Error("Unable to save reminder");
+    if (!reminder || !reminder.name)
+        throw Error("Reminder must have a name");
 
-    if (reminderVm.reminder.length > 30)
+    if (reminder.name.length > 30)
         throw Error("Reminder name must have at most 30 characters");
 
-    return new Promise((resolve, reject) => {
-        try {
+    let reminders = getAllReminders();
 
-            let reminders = [];
-
-            try {
-                reminders = JSON.parse(localStorage.getItem(key));
-            } catch {
-                reminders = [];
-            }
-
-            if (!reminders || !reminders.length)
-                reminders = [];
-
-            reminders = reminders.filter((x) => {
-                return x.id != reminderVm.id;
-            })
-
-            reminders.push(reminderVm);
-            reminders = reminders.sort(sortReminders);
-            localStorage.setItem(this.key, JSON.stringify(reminders));
-
-            resolve(reminderVm.id)
-        } catch (e) {
-            reject(e)
-        }
+    reminders = reminders.filter((x) => {
+        return x.id != reminder.id;
     })
+
+    reminders.push(reminder);
+    reminders = reminders.sort(sortReminders);
+
+    postReminders(reminders);
+
+    return of(reminder)
 }
 
 export function addReminder(reminder) {
 
-    return new Promise(async (resolve) => {
+    if (!reminder || !reminder.name)
+        throw Error("Reminder must have a name");
 
-        if (!reminder || !reminder.reminder)
-            throw Error("Unable to save reminder");
+    if (reminder.name.length > 30)
+        throw Error("Reminder name must have at most 30 characters");
 
-        if (reminder.reminder.length > 30)
-            throw Error("Reminder name must have at most 30 characters");
+    let reminders = getAllReminders();
 
-        let reminders = [];
+    reminder.id = uuidv4();
+    reminders.push(reminder);
+    reminders = reminders.sort(sortReminders);
 
-        try {
-            reminders = JSON.parse(localStorage.getItem(key));
-        } catch {
-            reminders = [];
-        }
+    postReminders(reminders);
 
-        if (!reminders || !reminders.length)
-            reminders = [];
-
-        reminder.id = uuidv4(); // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
-        reminders.push(reminder);
-        reminders = reminders.sort(sortReminders);
-        localStorage.setItem(this.key, JSON.stringify(reminders));
-
-        resolve(reminder);
-
-    })
+    return of(reminder);
 }
 
-export function getRemindersForDate(reminderDateVm) {
-    return new Promise((resolve, reject) => {
+export function getRemindersForDate(day, month, year) {
 
-        let reminders = [];
+    let reminders = getAllReminders();
 
-        try {
-            reminders = JSON.parse(localStorage.getItem(this.key));
-        } catch {
-            reminders = [];
-        }
+    const date = `${String(year).padStart(4, 0)}-${String(month).padStart(2, 0)}-${String(day).padStart(2, 0)}`;
 
-        if (!reminders || !reminders.length)
-            reminders = [];
+    reminders = reminders.filter(reminder => {
+        return reminder.date == date;
+    })
 
-        if (reminders && reminders.length > 0) {
-            reminders = reminders.filter(date => {
-                return +date.date.year == +reminderDateVm.year
-                    && +(date.date.month - 1) == +reminderDateVm.month
-                    && +date.date.day == +reminderDateVm.day;
-            })
-        }
-
-        // reminders = reminders.sort(this.sortReminders);
-        resolve(reminders);
-
-    });
+    return of(reminders);
 }

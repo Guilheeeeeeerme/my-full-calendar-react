@@ -1,32 +1,35 @@
 import { Button, DialogActions, DialogContent, DialogTitle, FormControl, FormHelperText, Grid, Stack, TextField } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
-import { Component, useState } from 'react';
+import { Component } from 'react';
 import { addReminder } from '../../services/reminder.service';
 
 export class MyFullCalendarAddReminder extends Component {
+
+    inputProps = {
+        name: { required: true, maxLength: 30 },
+        date: { required: true },
+        time: { required: true, step: 300 },
+        location: {},
+        color: {},
+    }
 
     constructor() {
         super();
 
         this.state = {
-            reminder: '',
-            date: '',
-            time: '',
-            location: '',
-            color: '',
-        };
-
-        this.inputProps = {
-            reminder: { required: true, maxLength: 30 },
-            date: { required: true },
-            time: { required: true, step: 300 },
-            location: {},
-            color: {},
+            reminder: {
+                name: '', 
+                date: '', 
+                time: '', 
+                location: '', 
+                color: ''
+            }
         }
     }
 
     render() {
-        const { reminder, date, time, location, color } = this.state;
+
+        const { name, date, time, location, color } = this.state.reminder;
         const { onClose, open } = this.props;
 
         const handleClose = () => {
@@ -35,14 +38,16 @@ export class MyFullCalendarAddReminder extends Component {
 
         const handleChange = (event) => {
             this.setState({
-                ...this.state,
-                [event.target.name]: event.target.value,
+                reminder: {
+                    ...this.state.reminder,
+                    [event.target.name]: event.target.value,
+                }
             });
         };
 
         const handleSubmit = (event) => {
             event.preventDefault();
-            addReminder({ reminder, date, time, location, color })
+            addReminder({ name, date, time, location, color })
             onClose();
         };
 
@@ -56,8 +61,8 @@ export class MyFullCalendarAddReminder extends Component {
 
                             <FormControl margin='dense'>
                                 <TextField id="reminder-input" aria-describedby="Reminder Name"
-                                    value={reminder} name='reminder' label="Reminder"
-                                    inputProps={{ ...this.inputProps.reminder }}
+                                    value={name} name='name' label="Reminder"
+                                    inputProps={{ ...this.inputProps.name }}
                                     onChange={(e) => { handleChange(e) }} />
                                 <FormHelperText id="reminder-helper-text">Remind me about this.</FormHelperText>
                             </FormControl>
