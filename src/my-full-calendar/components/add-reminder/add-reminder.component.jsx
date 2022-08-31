@@ -12,43 +12,40 @@ export class MyFullCalendarAddReminder extends Component {
         location: {},
         color: {},
     }
+    initialState = {
+        name: '',
+        date: '',
+        time: '',
+        location: '',
+        color: ''
+    }
 
     constructor() {
         super();
-
-        this.state = {
-            reminder: {
-                name: '', 
-                date: '', 
-                time: '', 
-                location: '', 
-                color: ''
-            }
-        }
+        this.state = this.initialState;
     }
 
     render() {
 
-        const { name, date, time, location, color } = this.state.reminder;
+        const { name, date, time, location, color } = this.state;
         const { onClose, open } = this.props;
 
         const handleClose = () => {
+            this.setState(this.initialState);
             onClose();
         };
 
         const handleChange = (event) => {
             this.setState({
-                reminder: {
-                    ...this.state.reminder,
-                    [event.target.name]: event.target.value,
-                }
+                ...this.state,
+                [event.target.name]: event.target.value,
             });
         };
 
         const handleSubmit = (event) => {
             event.preventDefault();
             addReminder({ name, date, time, location, color })
-            onClose();
+            handleClose();
         };
 
         return (
