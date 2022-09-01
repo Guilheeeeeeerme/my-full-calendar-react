@@ -2,7 +2,6 @@ import AddIcon from '@mui/icons-material/Add';
 import { Button } from "@mui/material";
 import moment from "moment";
 import React, { useState } from 'react';
-import { CalendarDateViewModel } from "../../models/CalendarDateViewModel";
 import { MyFullCalendarAddReminder } from "../add-reminder/add-reminder.component";
 import { MyFullCalendarMonthlyCalendarDate } from "../monthly-calendar-date/monthly-calendar-date.component";
 import './monthly-calendar.styles.scss';
@@ -39,7 +38,13 @@ export const MyFullCalendarMonthlyCalendar = ({ month, year }) => {
     }
 
     while (viewMonthStartsAt <= viewMonthEndsAt) {
-        datesInMonth.push(new CalendarDateViewModel(viewMonthStartsAt, viewMonthStartsAt.getMonth() == month));
+        datesInMonth.push({
+            withinTheViewMonth: viewMonthStartsAt.getMonth() == month,
+            day: viewMonthStartsAt.getDate(),
+            weekday: viewMonthStartsAt.getDay(),
+            month: viewMonthStartsAt.getMonth(),
+            year: viewMonthStartsAt.getFullYear(),
+        })
         viewMonthStartsAt.setDate(viewMonthStartsAt.getDate() + 1);
     }
 

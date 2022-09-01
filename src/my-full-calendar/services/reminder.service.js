@@ -1,4 +1,4 @@
-import { lastValueFrom, of } from 'rxjs';
+import { of } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 
 const key = "my-reminders";

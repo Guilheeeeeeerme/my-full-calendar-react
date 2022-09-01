@@ -24,10 +24,12 @@ export class MyFullCalendarMonthlyCalendarDateReminders extends Component {
     }
 
     render() {
+ 
+        const { reminders } = this.state
 
         return (
             <div className="MyFullCalendarMonthlyCalendarDateRemindersContainer">
-                {this.state.reminders.map(reminder => (
+                {reminders.map(reminder => (
                     <p key={reminder.id} className="MyFullCalendarMonthlyCalendarDateRemindersValue">
                         {reminder.name} - {reminder.time}
                         {/* <pre>{JSON.stringify(reminder, null, 2) }</pre> */}
