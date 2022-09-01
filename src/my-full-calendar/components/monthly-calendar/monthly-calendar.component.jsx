@@ -1,108 +1,151 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from "@mui/material";
+import { render } from '@testing-library/react';
 import moment from "moment";
-import React, { useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { MyFullCalendarAddReminder } from "../add-reminder/add-reminder.component";
 import { MyFullCalendarMonthlyCalendarDate } from "../monthly-calendar-date/monthly-calendar-date.component";
 import './monthly-calendar.styles.scss';
 
-export const MyFullCalendarMonthlyCalendar = ({ month, year }) => {
+export class MyFullCalendarMonthlyCalendar extends Component {
 
-    const [openAddReminder, setOpenAddReminder] = useState(false);
-
-    if (month == null)
-        throw '"month" is required';
-
-    if (year == null)
-        throw '"year" is required';
-
-    const monthLabel = moment(new Date(year, month, 1)).format('MMMM YYYY');
-
-    const weekDays = [
+    weekDays = [
         'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
     ]
 
-    const datesInMonth = [];
+    constructor() {
+        super();
 
-    let viewMonthStartsAt = new Date(year, month, 1);
-    let viewMonthEndsAt = new Date(year, month + 1, 0);
-
-    // fill the left side until sunday
-    while (viewMonthStartsAt.getDay() != 0) {
-        viewMonthStartsAt.setDate(viewMonthStartsAt.getDate() - 1);
+        this.state = {
+            openAddReminder: false,
+            datesInMonth: [],
+            monthLabel: ''
+        }
     }
 
-    // fill the right side until saturday
-    while (viewMonthEndsAt.getDay() != 6) {
-        viewMonthEndsAt.setDate(viewMonthEndsAt.getDate() + 1);
+    componentDidMount() {
+        const { month, year } = this.props;
+        this.initDatesInMonth(month, year)
     }
 
-    while (viewMonthStartsAt <= viewMonthEndsAt) {
-        datesInMonth.push({
-            withinTheViewMonth: viewMonthStartsAt.getMonth() == month,
-            day: viewMonthStartsAt.getDate(),
-            weekday: viewMonthStartsAt.getDay(),
-            month: viewMonthStartsAt.getMonth(),
-            year: viewMonthStartsAt.getFullYear(),
+    componentWillReceiveProps(nextProps) {
+        const { month, year } = nextProps;
+
+        if (month != this.props.month || year != this.props.year) {
+            this.initDatesInMonth(month, year);
+        }
+
+    }
+
+    initDatesInMonth = (month, year) => {
+
+        if (month == null)
+            throw '"month" is required';
+
+        if (year == null)
+            throw '"year" is required';
+
+        const datesInMonth = [];
+
+        let viewMonthStartsAt = new Date(year, month, 1);
+        let viewMonthEndsAt = new Date(year, month + 1, 0);
+
+        // fill the left side until sunday
+        while (viewMonthStartsAt.getDay() != 0) {
+            viewMonthStartsAt.setDate(viewMonthStartsAt.getDate() - 1);
+        }
+
+        // fill the right side until saturday
+        while (viewMonthEndsAt.getDay() != 6) {
+            viewMonthEndsAt.setDate(viewMonthEndsAt.getDate() + 1);
+        }
+
+        while (viewMonthStartsAt <= viewMonthEndsAt) {
+            datesInMonth.push({
+                withinTheViewMonth: viewMonthStartsAt.getMonth() == month,
+                day: viewMonthStartsAt.getDate(),
+                weekday: viewMonthStartsAt.getDay(),
+                month: viewMonthStartsAt.getMonth(),
+                year: viewMonthStartsAt.getFullYear(),
+            })
+            viewMonthStartsAt.setDate(viewMonthStartsAt.getDate() + 1);
+        }
+
+        const monthLabel = moment(new Date(year, month, 1)).format('MMMM YYYY');
+
+        this.setState({
+            datesInMonth: datesInMonth,
+            monthLabel: monthLabel,
         })
-        viewMonthStartsAt.setDate(viewMonthStartsAt.getDate() + 1);
+
+
     }
 
-    const selectDate = (selectedDate) => {
+    selectDate = (selectedDate) => {
         // debugger;
     }
 
-    const handleClickAddReminder = () => {
-        setOpenAddReminder(true);
-    };
-
-    const onCloseAddReminder = (reminder) => {
-        setOpenAddReminder(false);
-    };
-
-    function getKey(dateInMonth) {
-        return [
-            `${dateInMonth.year}`.padStart(4, 0),
-            `${dateInMonth.month}`.padStart(2, 0),
-            `${dateInMonth.day}`.padStart(2, 0),
-        ].join('')
+    setOpenAddReminder(openAddReminder) {
+        this.setState({
+            openAddReminder: openAddReminder
+        })
     }
 
-    return (
-        <div className="MyFullCalendarMonthlyCalendarContainer">
+    handleClickAddReminder = () => {
+        this.setOpenAddReminder(true);
+    };
 
-            <h3> {monthLabel} </h3>
+    onCloseAddReminder = (reminder) => {
+        this.setOpenAddReminder(false);
+    };
 
-            <Button variant="text"
-                aria-label='Add reminder button'
-                onClick={handleClickAddReminder}
-                endIcon={<AddIcon />}>New Reminder</Button>
+    getKey(dateInMonth) {
+        return [
+            `${dateInMonth.year}`.padStart(4, 0),
+            `${dateInMonth.month - 1}`.padStart(2, 0),
+            `${dateInMonth.day}`.padStart(2, 0),
+        ].join('-')
+    }
 
-            <div className="MyFullCalendarMonthlyCalendarWeekdays">
-                {weekDays.map(weekDay => (
-                    <div key={weekDay} className="MyFullCalendarMonthlyCalendarWeekdayValue">{weekDay}</div>
-                ))}
+    render() {
+        const { monthLabel, datesInMonth, openAddReminder } = this.state;
+
+        return (
+            <div className="MyFullCalendarMonthlyCalendarContainer">
+
+                <h3> {monthLabel} </h3>
+
+                <Button variant="text"
+                    aria-label='Add reminder button'
+                    onClick={this.handleClickAddReminder}
+                    endIcon={<AddIcon />}>New Reminder</Button>
+
+                <div className="MyFullCalendarMonthlyCalendarWeekdays">
+                    {this.weekDays.map(weekDay => (
+                        <div key={weekDay} className="MyFullCalendarMonthlyCalendarWeekdayValue">{weekDay}</div>
+                    ))}
+                </div>
+
+                <div className="MyFullCalendarMonthlyCalendarDateValues">
+                    {datesInMonth.map(dateInMonth => (
+                        <MyFullCalendarMonthlyCalendarDate
+                            key={this.getKey(dateInMonth)}
+                            withinTheViewMonth={dateInMonth.withinTheViewMonth}
+                            day={dateInMonth.day}
+                            weekday={dateInMonth.weekday}
+                            month={dateInMonth.month}
+                            year={dateInMonth.year}
+                            onSelectDate={this.selectDate}
+                        />
+                    ))}
+                </div>
+
+                <MyFullCalendarAddReminder
+                    open={openAddReminder}
+                    onClose={this.onCloseAddReminder} />
+
             </div>
-
-            <div className="MyFullCalendarMonthlyCalendarDateValues">
-                {datesInMonth.map(dateInMonth => (
-                    <MyFullCalendarMonthlyCalendarDate
-                        key={getKey(dateInMonth)}
-                        withinTheViewMonth={dateInMonth.withinTheViewMonth}
-                        day={dateInMonth.day}
-                        weekday={dateInMonth.weekday}
-                        month={dateInMonth.month}
-                        year={dateInMonth.year}
-                        onSelectDate={selectDate}
-                    />
-                ))}
-            </div>
-
-            <MyFullCalendarAddReminder
-                open={openAddReminder}
-                onClose={onCloseAddReminder} />
-
-        </div>
-    );
+        );
+    }
 
 }

@@ -46,6 +46,7 @@ export class MyFullCalendarAddReminder extends Component {
             event.preventDefault();
             addReminder({ name, date, time, location, color })
                 .subscribe((newReminder) => {
+                    this.setState(this.initialState);
                     onClose(newReminder);
                 })
         };

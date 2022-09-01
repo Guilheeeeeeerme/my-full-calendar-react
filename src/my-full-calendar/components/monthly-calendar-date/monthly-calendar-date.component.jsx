@@ -1,43 +1,82 @@
+import { render } from '@testing-library/react';
+import { useState } from 'react';
+import { Component } from 'react';
+import { Subject, takeUntil } from 'rxjs';
+import { getRemindersForDate } from '../../services/reminder.service';
 import { MyFullCalendarMonthlyCalendarDateReminders } from '../monthly-calendar-date-reminders/monthly-calendar-date-reminders.component';
 import './monthly-calendar-date.styles.scss';
 
-export const MyFullCalendarMonthlyCalendarDate = ({ withinTheViewMonth, day, weekday, month, year, onSelectDate }) => {
+export class MyFullCalendarMonthlyCalendarDate extends Component {
 
-    const isWeekend = !(weekday % 6);
+    onAsyncDone$ = new Subject();
 
-    const handleSelectDate = () => {
-        onSelectDate && onSelectDate({
-            withinTheViewMonth, day, weekday, month, year
-        });
+    constructor() {
+        super();
+
+        this.state = {
+            reminders: []
+        }
     }
 
-    return (
-        <div onClick={handleSelectDate}
-            className={`my-calendar-datebox ${isWeekend ? "weekend" : ""} ${!withinTheViewMonth ? "not-month" : ""}`}>
 
-            <div className="date-label-container">
-                <p className="date-label">{day}</p>
-            </div>
+    componentDidMount() {
+        console.log(`componentDidMount MyFullCalendarMonthlyCalendarDate`);
+        const { day, month, year } = this.props;
+        this._loadAsyncData(day, month, year);
+    }
 
-            <MyFullCalendarMonthlyCalendarDateReminders
-                day={day} 
-                month={month} 
-                year={year}
-            />
+    componentWillReceiveProps(nextProps) {
+        console.log(`componentWillReceiveProps MyFullCalendarMonthlyCalendarDate`);
+        const { day, month, year } = nextProps;
+        this.setState({ reminders: [] });
+        this._loadAsyncData(day, month, year);
+    }
 
-            {/*
-            <div class="reminders-container">
-                <div class="reminders-container-list">
-                    <p class="reminders-container-list-item" *ngFor="let reminder of reminders"
-                    [ngStyle]="{'color': reminder.color }">
-                    {{ reminder | reminderDescription : 'short' }}</p>
-                <p class="reminders-container-list-item" *ngIf="hasMore > 0">
-                {{ hasMore }} more ...</p>
+    componentWillUnmount() {
+        console.log(`componentWillUnmount MyFullCalendarMonthlyCalendarDate`);
+        this.onAsyncDone$.next()
+    }
+
+    _loadAsyncData(day, month, year) {
+        getRemindersForDate(day, month + 1, year)
+            .pipe(takeUntil(this.onAsyncDone$))
+            .subscribe((reminders) => {
+                this.setState({ reminders: reminders })
+            })
+    }
+
+    render() {
+
+        const { withinTheViewMonth, day, weekday, month, year, onSelectDate } = this.props;
+        const { reminders } = this.state;
+
+        const isWeekend = !(weekday % 6);
+
+        const handleSelectDate = () => {
+            onSelectDate && onSelectDate({
+                withinTheViewMonth, day, weekday, month, year
+            });
+        }
+
+        console.log(`render MyFullCalendarMonthlyCalendarDate`);
+        return (
+            <div onClick={handleSelectDate}
+                className={`my-calendar-datebox ${isWeekend ? "weekend" : ""} ${!withinTheViewMonth ? "not-month" : ""}`}>
+
+                <div className="date-label-container">
+                    <p className="date-label">{day}</p>
                 </div>
-            </div >
-            */}
 
-        </div >
-    );
+                <MyFullCalendarMonthlyCalendarDateReminders
+                    reminders={reminders}
+                    day={day}
+                    month={month}
+                    year={year}
+                />
+
+            </div >
+        );
+
+    }
 
 }
