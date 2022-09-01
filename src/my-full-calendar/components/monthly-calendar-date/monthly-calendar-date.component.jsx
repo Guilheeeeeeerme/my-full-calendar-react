@@ -20,20 +20,17 @@ export class MyFullCalendarMonthlyCalendarDate extends Component {
 
 
     componentDidMount() {
-        console.log(`componentDidMount MyFullCalendarMonthlyCalendarDate`);
         const { day, month, year } = this.props;
         this._loadAsyncData(day, month, year);
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log(`componentWillReceiveProps MyFullCalendarMonthlyCalendarDate`);
         const { day, month, year } = nextProps;
         this.setState({ reminders: [] });
         this._loadAsyncData(day, month, year);
     }
 
     componentWillUnmount() {
-        console.log(`componentWillUnmount MyFullCalendarMonthlyCalendarDate`);
         this.onAsyncDone$.next()
     }
 
@@ -58,7 +55,6 @@ export class MyFullCalendarMonthlyCalendarDate extends Component {
             });
         }
 
-        console.log(`render MyFullCalendarMonthlyCalendarDate`);
         return (
             <div onClick={handleSelectDate}
                 className={`my-calendar-datebox ${isWeekend ? "weekend" : ""} ${!withinTheViewMonth ? "not-month" : ""}`}>
