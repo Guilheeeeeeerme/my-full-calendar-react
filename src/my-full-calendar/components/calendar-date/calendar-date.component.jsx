@@ -58,38 +58,22 @@ export class CalendarDate extends Component {
 
     onDeleteReminder = (reminderId) => {
         if (reminderId) {
-            const { reminders } = this.state;
-
             this.setState({
                 openEditReminder: false,
-                selectedReminder: null,
-                reminders: reminders.filter(reminder => {
-                    return reminder.id != reminderId;
-                })
+                selectedReminder: null
             })
+            this.initReminders();
         }
     }
 
     onCloseEditReminder = (updatedReminder) => {
         if (updatedReminder) {
-            const { reminders } = this.state;
-
             this.setState({
                 openEditReminder: false,
-                selectedReminder: null,
-                reminders: reminders.map(reminder => {
-                    if (reminder.id == updatedReminder.id) {
-                        return {
-                            ...reminder,
-                            ...updatedReminder,
-                        }
-                    } else {
-                        return reminder;
-                    }
-                })
+                selectedReminder: null
             })
+            this.initReminders();
         } else {
-
             this.setState({
                 openEditReminder: false,
                 selectedReminder: null
