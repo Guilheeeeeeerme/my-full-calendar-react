@@ -1,18 +1,22 @@
+import { Component } from "react";
 
-export const CalendarDateReminders = ({ reminders, onSelectReminder }) => {
+export class CalendarDateReminders extends Component {
 
-    return (
-        <div className="MyFullCalendarMonthlyCalendarDateRemindersContainer">
-            {reminders.map(reminder => (
-                <p
-                    onClick={() => { onSelectReminder(reminder) }}
-                    key={reminder.id}
-                    className="MyFullCalendarMonthlyCalendarDateRemindersValue">
-                    {reminder.name} - {reminder.time}
-                </p>
-            ))}
-        </div>
-    )
+    render() {
+        const { reminders, onSelectReminder } = this.props;
 
+        return (
+            <div className="MyFullCalendarMonthlyCalendarDateRemindersContainer">
+                {reminders.map(reminder => (
+                    <p
+                        onClick={() => { onSelectReminder(reminder) }}
+                        key={reminder.id}
+                        className="MyFullCalendarMonthlyCalendarDateRemindersValue">
+                        {reminder.name} - {reminder.time}
+                    </p>
+                ))}
+            </div>
+        )
+    }
 
 }

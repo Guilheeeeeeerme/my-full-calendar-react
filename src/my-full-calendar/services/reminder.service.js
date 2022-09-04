@@ -37,15 +37,17 @@ function sortReminders(dateA, dateB) {
 
 }
 
-export function deleteReminder(reminderVm) {
+export function deleteReminder(reminderId) {
 
     let reminders = getAllReminders();
 
     reminders = reminders.filter((x) => {
-        return x.id != reminderVm.id;
+        return x.id != reminderId;
     })
 
     postReminders(reminders);
+
+    return of(null);
 
 }
 

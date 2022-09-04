@@ -2,6 +2,7 @@ import { Component } from 'react';
 import { Subject, takeUntil } from 'rxjs';
 import { getRemindersForDate } from '../../services/reminder.service';
 import { CalendarDateReminders } from '../calendar-date-reminders/calendar-date-reminders.component';
+import { EditReminder } from '../edit-reminder/edit-reminder.component';
 import './calendar-date.styles.scss';
 
 export class CalendarDate extends Component {
@@ -12,49 +13,94 @@ export class CalendarDate extends Component {
         super();
 
         this.state = {
+            openEditReminder: false,
+            selectedReminder: null,
             reminders: []
         }
     }
 
-
     componentDidMount() {
-        console.log('componentDidMount MyFullCalendarMonthlyCalendarDate');
         const { day, month, year } = this.props;
-        this._loadAsyncData(day, month, year);
+        this.initReminders(day, month, year);
     }
 
     componentDidUpdate(nextProps) {
         const { day, month, year } = nextProps;
-        // console.log(`componentDidUpdate MyFullCalendarMonthlyCalendarDate ${year}-${month}-${day}`);
-        // this.setState({ reminders: [] });
-        // this._loadAsyncData(day, month, year);
+        this.initReminders(day, month, year);
     }
 
-
-
     componentWillUnmount() {
-        console.log('componentWillUnmount MyFullCalendarMonthlyCalendarDate');
         this.onAsyncDone$.next()
     }
 
-    _loadAsyncData(day, month, year) {
+    initReminders(day, month, year) {
         this.onAsyncDone$.next()
 
         getRemindersForDate(day, month + 1, year)
             .pipe(takeUntil(this.onAsyncDone$))
-            .subscribe((reminders) => {
-                this.setState({ reminders: reminders })
+            .subscribe((newReminders) => {
+                const { reminders } = this.state;
+
+                if ((newReminders?.map(x => x.id).sort().join()) != (reminders?.map(x => x.id).sort().join())) {
+                    this.setState({
+                        reminders: newReminders
+                    })
+                }
             })
     }
 
     selectReminder = (reminder) => {
-        console.log(reminder);
+        this.setState({
+            openEditReminder: true,
+            selectedReminder: reminder
+        })
+    }
+
+    onDeleteReminder = (reminderId) => {
+        if (reminderId) {
+            const { reminders } = this.state;
+
+            this.setState({
+                openEditReminder: false,
+                selectedReminder: null,
+                reminders: reminders.filter(reminder => {
+                    return reminder.id != reminderId;
+                })
+            })
+        }
+    }
+
+    onCloseEditReminder = (updatedReminder) => {
+        if (updatedReminder) {
+            const { reminders } = this.state;
+
+            this.setState({
+                openEditReminder: false,
+                selectedReminder: null,
+                reminders: reminders.map(reminder => {
+                    if (reminder.id == updatedReminder.id) {
+                        return {
+                            ...reminder,
+                            ...updatedReminder,
+                        }
+                    } else {
+                        return reminder;
+                    }
+                })
+            })
+        } else {
+
+            this.setState({
+                openEditReminder: false,
+                selectedReminder: null
+            })
+        }
     }
 
     render() {
 
         const { withinTheViewMonth, day, weekday, month, year } = this.props;
-        const { reminders } = this.state;
+        const { reminders, openEditReminder, selectedReminder } = this.state;
 
         const isWeekend = !(weekday % 6);
 
@@ -73,6 +119,14 @@ export class CalendarDate extends Component {
                     year={year}
                     onSelectReminder={this.selectReminder}
                 />
+
+                {
+                    openEditReminder && (<EditReminder
+                        open={openEditReminder}
+                        reminder={selectedReminder}
+                        onDelete={this.onDeleteReminder}
+                        onClose={this.onCloseEditReminder} />)
+                }
 
             </div >
         );

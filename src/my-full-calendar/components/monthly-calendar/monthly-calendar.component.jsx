@@ -23,14 +23,11 @@ export class MonthlyCalendar extends Component {
     }
 
     componentDidMount() {
-        // console.log('componentDidMount MyFullCalendarMonthlyCalendar');
         const { month, year } = this.props;
         this.initDatesInMonth(month, year)
     }
 
     componentDidUpdate(prevProps) {
-        // console.log('componentDidUpdate MyFullCalendarMonthlyCalendar');
-
         const { month, year } = this.props;
         if (month != prevProps.month || year != prevProps.year) {
             this.initDatesInMonth(month, year);
@@ -135,9 +132,11 @@ export class MonthlyCalendar extends Component {
                     ))}
                 </div>
 
-                <AddReminder
-                    open={openAddReminder}
-                    onClose={this.onCloseAddReminder} />
+                {
+                    openAddReminder && (<AddReminder
+                        open={openAddReminder}
+                        onClose={this.onCloseAddReminder} />)
+                }
 
             </div>
         );

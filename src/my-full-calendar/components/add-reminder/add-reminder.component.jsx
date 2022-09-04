@@ -12,48 +12,48 @@ export class AddReminder extends Component {
         location: {},
         color: {},
     }
-    initialState = {
-        name: '',
-        date: '',
-        time: '',
-        location: '',
-        color: ''
-    }
 
     constructor() {
         super();
-        this.state = this.initialState;
+        this.state = {
+            name: '',
+            date: '',
+            time: '',
+            location: '',
+            color: ''
+        };
     }
 
-    render() {
+    handleClose = () => {
+        const { onClose } = this.props;
+        onClose();
+    };
 
+    handleChange = (event) => {
+        this.setState({
+            ...this.state,
+            [event.target.name]: event.target.value,
+        });
+    };
+
+    handleSubmit = (event) => {
         const { name, date, time, location, color } = this.state;
-        const { onClose, open } = this.props;
+        const { onClose } = this.props;
 
-        const handleClose = () => {
-            this.setState(this.initialState);
-            onClose();
-        };
+        event.preventDefault();
+        addReminder({ name, date, time, location, color })
+            .subscribe((newReminder) => {
+                onClose(newReminder);
+            })
+    };
 
-        const handleChange = (event) => {
-            this.setState({
-                ...this.state,
-                [event.target.name]: event.target.value,
-            });
-        };
-
-        const handleSubmit = (event) => {
-            event.preventDefault();
-            addReminder({ name, date, time, location, color })
-                .subscribe((newReminder) => {
-                    this.setState(this.initialState);
-                    onClose(newReminder);
-                })
-        };
+    render() {
+        const { name, date, time, location, color } = this.state;
+        const { open } = this.props;
 
         return (
-            <Dialog onClose={handleClose} open={open}>
-                <form noValidate onSubmit={handleSubmit}>
+            <Dialog onClose={this.handleClose} open={open}>
+                <form noValidate onSubmit={this.handleSubmit}>
                     <DialogTitle>Add Reminder</DialogTitle>
                     <DialogContent>
 
@@ -63,7 +63,7 @@ export class AddReminder extends Component {
                                 <TextField id="reminder-input" aria-describedby="Reminder Name"
                                     value={name} name='name' label="Reminder"
                                     inputProps={{ ...this.inputProps.name }}
-                                    onChange={(e) => { handleChange(e) }} />
+                                    onChange={(e) => { this.handleChange(e) }} />
                                 <FormHelperText id="reminder-helper-text">Remind me about this.</FormHelperText>
                             </FormControl>
 
@@ -73,7 +73,7 @@ export class AddReminder extends Component {
                                     shrink: true,
                                 }}
                                 inputProps={{ ...this.inputProps.date }}
-                                onChange={(e) => { handleChange(e) }} />
+                                onChange={(e) => { this.handleChange(e) }} />
 
                             <TextField id="time-input" aria-describedby="Reminder Time" margin='dense'
                                 value={time} name='time' type="time" label="Time"
@@ -81,19 +81,19 @@ export class AddReminder extends Component {
                                     shrink: true,
                                 }}
                                 inputProps={{ ...this.inputProps.time }}
-                                onChange={(e) => { handleChange(e) }} />
+                                onChange={(e) => { this.handleChange(e) }} />
 
                             <Grid>
 
                                 <TextField id="location-input" aria-describedby="Reminder Location" margin='dense'
                                     value={location} name='location' label="Location"
                                     inputProps={{ ...this.inputProps.location }}
-                                    onChange={(e) => { handleChange(e) }} />
+                                    onChange={(e) => { this.handleChange(e) }} />
 
                                 <TextField id="color-input" aria-describedby="Reminder Color" margin='dense'
                                     value={color} name='color' label="Color"
                                     inputProps={{ ...this.inputProps.color }}
-                                    onChange={(e) => { handleChange(e) }} />
+                                    onChange={(e) => { this.handleChange(e) }} />
 
                             </Grid>
 
@@ -101,8 +101,8 @@ export class AddReminder extends Component {
 
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose}>Cancel</Button>
-                        <Button type='submit'>Add</Button>
+                        <Button onClick={this.handleClose}>Cancel</Button>
+                        <Button variant='contained' type='submit'>Add</Button>
                     </DialogActions>
                 </form>
             </Dialog>
