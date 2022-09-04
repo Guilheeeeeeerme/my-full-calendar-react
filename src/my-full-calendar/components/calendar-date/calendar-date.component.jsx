@@ -1,10 +1,10 @@
 import { Component } from 'react';
 import { Subject, takeUntil } from 'rxjs';
 import { getRemindersForDate } from '../../services/reminder.service';
-import { MyFullCalendarMonthlyCalendarDateReminders } from '../monthly-calendar-date-reminders/monthly-calendar-date-reminders.component';
-import './monthly-calendar-date.styles.scss';
+import { CalendarDateReminders } from '../calendar-date-reminders/calendar-date-reminders.component';
+import './calendar-date.styles.scss';
 
-export class MyFullCalendarMonthlyCalendarDate extends Component {
+export class CalendarDate extends Component {
 
     onAsyncDone$ = new Subject();
 
@@ -25,8 +25,8 @@ export class MyFullCalendarMonthlyCalendarDate extends Component {
 
     componentDidUpdate(nextProps) {
         const { day, month, year } = nextProps;
-        console.log(`componentDidUpdate MyFullCalendarMonthlyCalendarDate ${year}-${month}-${day}`);
-    //     // this.setState({ reminders: [] });
+        // console.log(`componentDidUpdate MyFullCalendarMonthlyCalendarDate ${year}-${month}-${day}`);
+        // this.setState({ reminders: [] });
         // this._loadAsyncData(day, month, year);
     }
 
@@ -66,7 +66,7 @@ export class MyFullCalendarMonthlyCalendarDate extends Component {
                     <p className="date-label">{day}</p>
                 </div>
 
-                <MyFullCalendarMonthlyCalendarDateReminders
+                <CalendarDateReminders
                     reminders={reminders}
                     day={day}
                     month={month}

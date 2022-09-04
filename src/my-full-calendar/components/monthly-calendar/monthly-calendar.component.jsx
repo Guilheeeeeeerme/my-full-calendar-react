@@ -1,13 +1,12 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from "@mui/material";
-import { render } from '@testing-library/react';
 import moment from "moment";
-import React, { Component, useEffect, useState } from 'react';
-import { MyFullCalendarAddReminder } from "../add-reminder/add-reminder.component";
-import { MyFullCalendarMonthlyCalendarDate } from "../monthly-calendar-date/monthly-calendar-date.component";
+import React, { Component } from 'react';
+import { AddReminder } from "../add-reminder/add-reminder.component";
+import { CalendarDate } from "../calendar-date/calendar-date.component";
 import './monthly-calendar.styles.scss';
 
-export class MyFullCalendarMonthlyCalendar extends Component {
+export class MonthlyCalendar extends Component {
 
     weekDays = [
         'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
@@ -31,7 +30,7 @@ export class MyFullCalendarMonthlyCalendar extends Component {
 
     componentDidUpdate(prevProps) {
         // console.log('componentDidUpdate MyFullCalendarMonthlyCalendar');
-        
+
         const { month, year } = this.props;
         if (month != prevProps.month || year != prevProps.year) {
             this.initDatesInMonth(month, year);
@@ -125,7 +124,7 @@ export class MyFullCalendarMonthlyCalendar extends Component {
 
                 <div className="MyFullCalendarMonthlyCalendarDateValues">
                     {datesInMonth.map(dateInMonth => (
-                        <MyFullCalendarMonthlyCalendarDate
+                        <CalendarDate
                             key={this.getKey(dateInMonth)}
                             withinTheViewMonth={dateInMonth.withinTheViewMonth}
                             day={dateInMonth.day}
@@ -136,7 +135,7 @@ export class MyFullCalendarMonthlyCalendar extends Component {
                     ))}
                 </div>
 
-                <MyFullCalendarAddReminder
+                <AddReminder
                     open={openAddReminder}
                     onClose={this.onCloseAddReminder} />
 

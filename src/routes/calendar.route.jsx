@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import { Component } from "react";
-import { MyFullCalendarMonthlyCalendar } from '../my-full-calendar/components/monthly-calendar/monthly-calendar.component';
+import { MonthlyCalendar } from '../my-full-calendar/components/monthly-calendar/monthly-calendar.component';
 
 export class Calendar extends Component {
 
@@ -53,7 +53,7 @@ export class Calendar extends Component {
                 </Toolbar>
 
                 <main>
-                    <MyFullCalendarMonthlyCalendar
+                    <MonthlyCalendar
                         month={currentMonth}
                         year={currentFullYear}
                     />

@@ -1,5 +1,5 @@
 
-export const MyFullCalendarMonthlyCalendarDateReminders = ({ reminders, onSelectReminder }) => {
+export const CalendarDateReminders = ({ reminders, onSelectReminder }) => {
 
     return (
         <div className="MyFullCalendarMonthlyCalendarDateRemindersContainer">

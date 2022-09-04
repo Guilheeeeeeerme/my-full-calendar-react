@@ -1,6 +1,6 @@
 import Dialog from '@mui/material/Dialog';
 
-export const MyFullCalendarEditReminder = () => {
+export const EditReminder = () => {
     return (
         <Dialog>
             <DialogTitle>Edit Reminder</DialogTitle>

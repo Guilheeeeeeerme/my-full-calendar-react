@@ -3,7 +3,7 @@ import Dialog from '@mui/material/Dialog';
 import { Component } from 'react';
 import { addReminder } from '../../services/reminder.service';
 
-export class MyFullCalendarAddReminder extends Component {
+export class AddReminder extends Component {
 
     inputProps = {
         name: { required: true, maxLength: 30 },
