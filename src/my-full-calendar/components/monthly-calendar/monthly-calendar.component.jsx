@@ -24,17 +24,18 @@ export class MyFullCalendarMonthlyCalendar extends Component {
     }
 
     componentDidMount() {
+        // console.log('componentDidMount MyFullCalendarMonthlyCalendar');
         const { month, year } = this.props;
         this.initDatesInMonth(month, year)
     }
 
-    componentWillReceiveProps(nextProps) {
-        const { month, year } = nextProps;
-
-        if (month != this.props.month || year != this.props.year) {
+    componentDidUpdate(prevProps) {
+        // console.log('componentDidUpdate MyFullCalendarMonthlyCalendar');
+        
+        const { month, year } = this.props;
+        if (month != prevProps.month || year != prevProps.year) {
             this.initDatesInMonth(month, year);
         }
-
     }
 
     initDatesInMonth = (month, year) => {
@@ -79,10 +80,6 @@ export class MyFullCalendarMonthlyCalendar extends Component {
         })
 
 
-    }
-
-    selectDate = (selectedDate) => {
-        // debugger;
     }
 
     setOpenAddReminder(openAddReminder) {
@@ -135,7 +132,6 @@ export class MyFullCalendarMonthlyCalendar extends Component {
                             weekday={dateInMonth.weekday}
                             month={dateInMonth.month}
                             year={dateInMonth.year}
-                            onSelectDate={this.selectDate}
                         />
                     ))}
                 </div>

@@ -1,5 +1,3 @@
-import { render } from '@testing-library/react';
-import { useState } from 'react';
 import { Component } from 'react';
 import { Subject, takeUntil } from 'rxjs';
 import { getRemindersForDate } from '../../services/reminder.service';
@@ -20,21 +18,28 @@ export class MyFullCalendarMonthlyCalendarDate extends Component {
 
 
     componentDidMount() {
+        console.log('componentDidMount MyFullCalendarMonthlyCalendarDate');
         const { day, month, year } = this.props;
         this._loadAsyncData(day, month, year);
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentDidUpdate(nextProps) {
         const { day, month, year } = nextProps;
-        this.setState({ reminders: [] });
-        this._loadAsyncData(day, month, year);
+        console.log(`componentDidUpdate MyFullCalendarMonthlyCalendarDate ${year}-${month}-${day}`);
+    //     // this.setState({ reminders: [] });
+        // this._loadAsyncData(day, month, year);
     }
 
+
+
     componentWillUnmount() {
+        console.log('componentWillUnmount MyFullCalendarMonthlyCalendarDate');
         this.onAsyncDone$.next()
     }
 
     _loadAsyncData(day, month, year) {
+        this.onAsyncDone$.next()
+
         getRemindersForDate(day, month + 1, year)
             .pipe(takeUntil(this.onAsyncDone$))
             .subscribe((reminders) => {
@@ -42,21 +47,19 @@ export class MyFullCalendarMonthlyCalendarDate extends Component {
             })
     }
 
+    selectReminder = (reminder) => {
+        console.log(reminder);
+    }
+
     render() {
 
-        const { withinTheViewMonth, day, weekday, month, year, onSelectDate } = this.props;
+        const { withinTheViewMonth, day, weekday, month, year } = this.props;
         const { reminders } = this.state;
 
         const isWeekend = !(weekday % 6);
 
-        const handleSelectDate = () => {
-            onSelectDate && onSelectDate({
-                withinTheViewMonth, day, weekday, month, year
-            });
-        }
-
         return (
-            <div onClick={handleSelectDate}
+            <div
                 className={`my-calendar-datebox ${isWeekend ? "weekend" : ""} ${!withinTheViewMonth ? "not-month" : ""}`}>
 
                 <div className="date-label-container">
@@ -68,6 +71,7 @@ export class MyFullCalendarMonthlyCalendarDate extends Component {
                     day={day}
                     month={month}
                     year={year}
+                    onSelectReminder={this.selectReminder}
                 />
 
             </div >

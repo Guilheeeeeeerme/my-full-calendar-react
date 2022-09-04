@@ -1,12 +1,14 @@
 
-export const MyFullCalendarMonthlyCalendarDateReminders = ({ reminders }) => {
+export const MyFullCalendarMonthlyCalendarDateReminders = ({ reminders, onSelectReminder }) => {
 
     return (
         <div className="MyFullCalendarMonthlyCalendarDateRemindersContainer">
             {reminders.map(reminder => (
-                <p key={reminder.id} className="MyFullCalendarMonthlyCalendarDateRemindersValue">
+                <p
+                    onClick={() => { onSelectReminder(reminder) }}
+                    key={reminder.id}
+                    className="MyFullCalendarMonthlyCalendarDateRemindersValue">
                     {reminder.name} - {reminder.time}
-                    {/* <pre>{JSON.stringify(reminder, null, 2) }</pre> */}
                 </p>
             ))}
         </div>
