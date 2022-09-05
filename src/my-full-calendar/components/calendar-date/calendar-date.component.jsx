@@ -32,7 +32,7 @@ export class CalendarDate extends Component {
         this.onAsyncDone$.next()
     }
 
-    initReminders(day, month, year) {
+    initReminders = (day, month, year) => {
         this.onAsyncDone$.next()
 
         getRemindersForDate(day, month + 1, year)
@@ -48,7 +48,7 @@ export class CalendarDate extends Component {
             })
     }
 
-    selectReminder(reminder) {
+    selectReminder = (reminder) => {
         this.setState({
             openEditReminder: true,
             selectedReminder: reminder
@@ -56,7 +56,7 @@ export class CalendarDate extends Component {
     }
 
 
-    onDeleteReminder(reminder) {
+    onDeleteReminder = (reminder) => {
         const { onReminderDeleted } = this.props;
 
         this.setState({
@@ -70,7 +70,7 @@ export class CalendarDate extends Component {
         }
     }
 
-    onCloseAddReminder(reminder) {
+    onCloseAddReminder = (reminder) => {
         const { onReminderAdded } = this.props;
 
         this.setState({
@@ -84,7 +84,7 @@ export class CalendarDate extends Component {
         }
     }
 
-    onCloseEditReminder(reminder) {
+    onCloseEditReminder = (reminder) => {
         const { onReminderEdited } = this.props;
 
         this.setState({
@@ -98,7 +98,7 @@ export class CalendarDate extends Component {
         }
     }
 
-    handleClickAddReminder() {
+    handleClickAddReminder = () => {
 
         const { day, month, year } = this.props;
         let now = new Date(year, month, day);

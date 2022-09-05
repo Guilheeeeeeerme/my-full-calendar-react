@@ -1,8 +1,8 @@
+import DeleteIcon from '@mui/icons-material/Delete';
 import { Button, DialogActions, DialogContent, DialogTitle, FormControl, FormHelperText, Grid, Stack, TextField } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import { Component } from 'react';
 import { deleteReminder, updateReminder } from '../../services/reminder.service';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { ReminderWeatherInfo } from '../reminder-weather-info/reminder-weather-info.component';
 
 export class EditReminder extends Component {
@@ -27,7 +27,7 @@ export class EditReminder extends Component {
         };
     }
 
-    componentDidMount () {
+    componentDidMount() {
         const { reminder } = this.props;
         const { id, name, date, time, location, color } = reminder;
 
@@ -36,7 +36,7 @@ export class EditReminder extends Component {
         });
     }
 
-    handleSubmit (event) {
+    handleSubmit = (event) => {
         const { id, name, date, time, location, color } = this.state;
         const { onClose } = this.props;
 
@@ -47,19 +47,19 @@ export class EditReminder extends Component {
             })
     };
 
-    handleClose () {
+    handleClose = () => {
         const { onClose } = this.props;
         onClose();
     };
 
-    handleChange (event) {
+    handleChange = (event) => {
         this.setState({
             ...this.state,
             [event.target.name]: event.target.value,
         });
     };
 
-    handleDelete () {
+    handleDelete = () => {
         const { id, name, date, time, location, color } = this.state;
         const { onDelete } = this.props;
         deleteReminder(id)

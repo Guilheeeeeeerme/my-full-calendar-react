@@ -13,7 +13,7 @@ export class ReminderWeatherInfo extends Component {
         }
     }
 
-    seForecast (forecast) {
+    setForecast(forecast) {
         this.setState({
             forecast: forecast
         })
@@ -22,7 +22,7 @@ export class ReminderWeatherInfo extends Component {
     loadForecast() {
         const { reminder } = this.props
 
-        this.abortController?.abort();
+        this.abort();
 
         if (reminder?.location) {
 
@@ -31,7 +31,7 @@ export class ReminderWeatherInfo extends Component {
             this.abortController = abortController;
 
             request.subscribe((forecast) => {
-                this.seForecast(forecast);
+                this.setForecast(forecast);
             })
         }
     }
@@ -48,12 +48,17 @@ export class ReminderWeatherInfo extends Component {
     }
 
     componentWillUnmount() {
+        this.abort();
+    }
+
+    abort() {
         this.abortController?.abort();
+        this.abortController = null;
     }
 
     render() {
         const { forecast } = this.state;
-        let weather = '';
+        let weather = this.abortController ? 'Loading weather info' : 'No Weather Info';
 
         if (forecast && forecast.main) {
             weather += `${forecast.main ? forecast.main?.temp + ' °C.' : ''}`;

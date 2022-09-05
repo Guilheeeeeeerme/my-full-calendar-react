@@ -36,7 +36,7 @@ export class AddReminder extends Component {
         }
     }
 
-    handleSubmit(event) {
+    handleSubmit = (event) => {
         const { name, date, time, location, color } = this.state;
         const { onClose } = this.props;
 
@@ -47,12 +47,12 @@ export class AddReminder extends Component {
             })
     };
 
-    handleClose() {
+    handleClose = () => {
         const { onClose } = this.props;
         onClose();
     };
 
-    handleChange(event) {
+    handleChange = (event) => {
         this.setState({
             ...this.state,
             [event.target.name]: event.target.value,

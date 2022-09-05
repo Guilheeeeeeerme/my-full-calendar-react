@@ -34,7 +34,7 @@ export class MonthlyCalendar extends Component {
         }
     }
 
-    initDatesInMonth (month, year) {
+    initDatesInMonth = (month, year) => {
 
         if (month == null)
             throw Error('"month" is required');
@@ -78,34 +78,34 @@ export class MonthlyCalendar extends Component {
 
     }
 
-    setOpenAddReminder(openAddReminder) {
+    setOpenAddReminder = (openAddReminder) => {
         this.setState({
             openAddReminder: openAddReminder
         })
     }
 
-    handleClickAddReminder () {
+    handleClickAddReminder = () => {
         this.setOpenAddReminder(true);
     };
 
-    onCloseAddReminder (reminder) {
+    onCloseAddReminder = (reminder) => {
         this.setOpenAddReminder(false);
     };
 
-    onReminderDeleted() {
+    onReminderDeleted = () => {
         this.forceUpdate();
     }
-    
-    onReminderAdded() {
-        this.forceUpdate();
-    }
-    
-    onReminderEdited() {
-        this.forceUpdate();
-    }
-    
 
-    getKey(dateInMonth) {
+    onReminderAdded = () => {
+        this.forceUpdate();
+    }
+
+    onReminderEdited = () => {
+        this.forceUpdate();
+    }
+
+
+    getKey = (dateInMonth) => {
         return [
             `${dateInMonth.year}`.padStart(4, 0),
             `${dateInMonth.month - 1}`.padStart(2, 0),
