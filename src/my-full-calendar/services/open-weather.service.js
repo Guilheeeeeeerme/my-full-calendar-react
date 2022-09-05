@@ -1,47 +1,42 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { OPENWEATHER_API, OPENWEATHER_TOKEN } from 'src/environments/urls';
-import { ReminderDateViewModel } from './viewModels/reminderDateViewModel';
 
-const environment = {
-    openWeatherToken: 'c9525f81a25a9392949a36f0ec4d06de',
-    openWeatherApiUrl: 'https://api.openweathermap.org/data/2.5',
-};
+import { environment } from '../../environments/enviroment';
+import { Observable } from 'rxjs';
+import moment from 'moment/moment';
 
-function filterMostRecent(forecastRes, date) {
-
-    let forecast = forecastRes.list.filter((x) => {
-        let dt = new Date(x.dt * 1000);
-        return dt.getFullYear() == date.year
-            && dt.getMonth() + 1 == date.month
-            && dt.getDate() == date.day;
-    })
-
-    if (forecast && forecast.length)
-        return forecast[forecast.length - 1];
-
-    return null;
-
+function filterMostRecent(forecasts, reminder) {
+    return forecasts?.list?.filter((forecast) => {
+        const date_str = moment(new Date(forecast.dt * 1000)).format('YYYY-MM-DD');
+        return date_str === reminder.date;
+    }).pop();
 }
 
-export function getWeatherForecast (city_name, date) {
+export function getWeatherForecastByCity(city_name, reminder) {
 
-    return new Promise((resolve, reject) => {
+    const abortController = new AbortController();
+    const observable = new Observable((subscriber) => {
 
-        const request = this.http.get(
-            `${OPENWEATHER_API}/forecast`, {
-            params: {
-                q: city_name,
-                units: 'metric',
-                appid: OPENWEATHER_TOKEN
-            }
-        });
+        const { signal } = abortController;
 
-        request.subscribe((res) => {
-            resolve(this.filterMostRecent(res, date))
-        }, reject);
+        const params = {
+            q: city_name,
+            units: 'metric',
+            appid: environment.openWeatherToken
+        }
 
-    });
+        fetch(
+            `${environment.openWeatherApiUrl}/forecast?${new URLSearchParams(params)}`,
+            { signal: signal })
+            .then((response) => response.json())
+            .then((forecasts) => filterMostRecent(forecasts, reminder))
+            .then((forecast) => {
+                subscriber.next(forecast);
+                subscriber.complete();
+            });
+
+    })
+
+
+    return [observable, abortController];
 
 }
 

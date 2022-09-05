@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { CalendarDateReminder } from "../calendar-date-reminder/calendar-date-reminder.component";
 
 export class CalendarDateReminders extends Component {
 
@@ -6,14 +7,13 @@ export class CalendarDateReminders extends Component {
         const { reminders, onSelectReminder } = this.props;
 
         return (
-            <div className="MyFullCalendarMonthlyCalendarDateRemindersContainer">
+            <div className="CalendarDateRemindersContainer">
                 {reminders.map(reminder => (
-                    <p
-                        onClick={() => { onSelectReminder(reminder) }}
+                    <CalendarDateReminder
+                        className="CalendarDateRemindersValue"
                         key={reminder.id}
-                        className="MyFullCalendarMonthlyCalendarDateRemindersValue">
-                        {reminder.name} - {reminder.time}
-                    </p>
+                        reminder={reminder}
+                        onSelectReminder={() => { onSelectReminder(reminder) }} />
                 ))}
             </div>
         )

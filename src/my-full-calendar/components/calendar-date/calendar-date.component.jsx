@@ -1,9 +1,12 @@
+import AddIcon from '@mui/icons-material/Add';
+import { Button, Card, CardActions, CardContent } from '@mui/material';
+import moment from 'moment';
 import { Component } from 'react';
 import { Subject, takeUntil } from 'rxjs';
 import { getRemindersForDate } from '../../services/reminder.service';
+import { AddReminder } from '../add-reminder/add-reminder.component';
 import { CalendarDateReminders } from '../calendar-date-reminders/calendar-date-reminders.component';
 import { EditReminder } from '../edit-reminder/edit-reminder.component';
-import './calendar-date.styles.scss';
 
 export class CalendarDate extends Component {
 
@@ -13,6 +16,7 @@ export class CalendarDate extends Component {
         super();
 
         this.state = {
+            openAddReminder: false,
             openEditReminder: false,
             selectedReminder: null,
             reminders: []
@@ -21,11 +25,6 @@ export class CalendarDate extends Component {
 
     componentDidMount() {
         const { day, month, year } = this.props;
-        this.initReminders(day, month, year);
-    }
-
-    componentDidUpdate(nextProps) {
-        const { day, month, year } = nextProps;
         this.initReminders(day, month, year);
     }
 
@@ -41,7 +40,7 @@ export class CalendarDate extends Component {
             .subscribe((newReminders) => {
                 const { reminders } = this.state;
 
-                if ((newReminders?.map(x => x.id).sort().join()) != (reminders?.map(x => x.id).sort().join())) {
+                if ((newReminders?.map(x => x.id).sort().join()) !== (reminders?.map(x => x.id).sort().join())) {
                     this.setState({
                         reminders: newReminders
                     })
@@ -49,60 +48,97 @@ export class CalendarDate extends Component {
             })
     }
 
-    selectReminder = (reminder) => {
+    selectReminder(reminder) {
         this.setState({
             openEditReminder: true,
             selectedReminder: reminder
         })
     }
 
-    onDeleteReminder = (reminderId) => {
-        if (reminderId) {
-            this.setState({
-                openEditReminder: false,
-                selectedReminder: null
-            })
+
+    onDeleteReminder(reminder) {
+        const { onReminderDeleted } = this.props;
+
+        this.setState({
+            openEditReminder: false,
+            selectedReminder: null
+        })
+
+        if (reminder) {
             this.initReminders();
+            onReminderDeleted && onReminderDeleted(reminder.id);
         }
     }
 
-    onCloseEditReminder = (updatedReminder) => {
-        if (updatedReminder) {
-            this.setState({
-                openEditReminder: false,
-                selectedReminder: null
-            })
+    onCloseAddReminder(reminder) {
+        const { onReminderAdded } = this.props;
+
+        this.setState({
+            openAddReminder: false,
+            selectedReminder: null
+        })
+
+        if (reminder) {
             this.initReminders();
-        } else {
-            this.setState({
-                openEditReminder: false,
-                selectedReminder: null
-            })
+            onReminderAdded && onReminderAdded(reminder);
         }
+    }
+
+    onCloseEditReminder(reminder) {
+        const { onReminderEdited } = this.props;
+
+        this.setState({
+            openEditReminder: false,
+            selectedReminder: null
+        })
+
+        if (reminder) {
+            this.initReminders();
+            onReminderEdited && onReminderEdited(reminder);
+        }
+    }
+
+    handleClickAddReminder() {
+
+        const { day, month, year } = this.props;
+        let now = new Date(year, month, day);
+        const date = moment(now).format('YYYY-MM-DD');
+
+        this.setState({
+            openAddReminder: true,
+            selectedReminder: {
+                date
+            }
+        })
     }
 
     render() {
 
         const { withinTheViewMonth, day, weekday, month, year } = this.props;
-        const { reminders, openEditReminder, selectedReminder } = this.state;
+        const { reminders, openAddReminder, openEditReminder, selectedReminder } = this.state;
 
         const isWeekend = !(weekday % 6);
 
         return (
-            <div
-                className={`my-calendar-datebox ${isWeekend ? "weekend" : ""} ${!withinTheViewMonth ? "not-month" : ""}`}>
 
-                <div className="date-label-container">
-                    <p className="date-label">{day}</p>
-                </div>
+            <Card className={`my-calendar-datebox ${isWeekend ? "weekend" : ""} ${!withinTheViewMonth ? "not-month" : ""}`}>
 
-                <CalendarDateReminders
-                    reminders={reminders}
-                    day={day}
-                    month={month}
-                    year={year}
-                    onSelectReminder={this.selectReminder}
-                />
+                <CardActions className="date-label-container">
+                    <Button size="small" variant="text"
+                        aria-label='Add reminder button'
+                        onClick={this.handleClickAddReminder}
+                        endIcon={<AddIcon />}>{day}</Button>
+                </CardActions>
+
+                <CardContent className="reminders-container">
+                    <CalendarDateReminders
+                        reminders={reminders}
+                        day={day}
+                        month={month}
+                        year={year}
+                        onSelectReminder={this.selectReminder}
+                    />
+                </CardContent>
 
                 {
                     openEditReminder && (<EditReminder
@@ -112,7 +148,16 @@ export class CalendarDate extends Component {
                         onClose={this.onCloseEditReminder} />)
                 }
 
-            </div >
+                {
+                    openAddReminder && (<AddReminder
+                        open={openAddReminder}
+                        reminder={selectedReminder}
+                        onClose={this.onCloseAddReminder} />)
+                }
+
+            </Card>
+
+
         );
 
     }

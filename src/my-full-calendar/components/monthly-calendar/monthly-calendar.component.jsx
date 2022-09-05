@@ -34,13 +34,13 @@ export class MonthlyCalendar extends Component {
         }
     }
 
-    initDatesInMonth = (month, year) => {
+    initDatesInMonth (month, year) {
 
         if (month == null)
-            throw '"month" is required';
+            throw Error('"month" is required');
 
         if (year == null)
-            throw '"year" is required';
+            throw Error('"year" is required');
 
         const datesInMonth = [];
 
@@ -84,13 +84,26 @@ export class MonthlyCalendar extends Component {
         })
     }
 
-    handleClickAddReminder = () => {
+    handleClickAddReminder () {
         this.setOpenAddReminder(true);
     };
 
-    onCloseAddReminder = (reminder) => {
+    onCloseAddReminder (reminder) {
         this.setOpenAddReminder(false);
     };
+
+    onReminderDeleted() {
+        this.forceUpdate();
+    }
+    
+    onReminderAdded() {
+        this.forceUpdate();
+    }
+    
+    onReminderEdited() {
+        this.forceUpdate();
+    }
+    
 
     getKey(dateInMonth) {
         return [
@@ -128,6 +141,10 @@ export class MonthlyCalendar extends Component {
                             weekday={dateInMonth.weekday}
                             month={dateInMonth.month}
                             year={dateInMonth.year}
+
+                            onReminderDeleted={this.onReminderDeleted}
+                            onReminderAdded={this.onReminderAdded}
+                            onReminderEdited={this.onReminderEdited}
                         />
                     ))}
                 </div>

@@ -3,6 +3,7 @@ import Dialog from '@mui/material/Dialog';
 import { Component } from 'react';
 import { deleteReminder, updateReminder } from '../../services/reminder.service';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { ReminderWeatherInfo } from '../reminder-weather-info/reminder-weather-info.component';
 
 export class EditReminder extends Component {
 
@@ -26,7 +27,7 @@ export class EditReminder extends Component {
         };
     }
 
-    componentDidMount = () => {
+    componentDidMount () {
         const { reminder } = this.props;
         const { id, name, date, time, location, color } = reminder;
 
@@ -35,7 +36,7 @@ export class EditReminder extends Component {
         });
     }
 
-    handleSubmit = (event) => {
+    handleSubmit (event) {
         const { id, name, date, time, location, color } = this.state;
         const { onClose } = this.props;
 
@@ -46,32 +47,32 @@ export class EditReminder extends Component {
             })
     };
 
-
-    handleClose = () => {
+    handleClose () {
         const { onClose } = this.props;
         onClose();
     };
 
-    handleDelete = () => {
-        const { onDelete } = this.props;
-        const { id } = this.state;
-        deleteReminder(id)
-            .subscribe(() => {
-                onDelete(id);
-            })
-    };
-
-    handleChange = (event) => {
+    handleChange (event) {
         this.setState({
             ...this.state,
             [event.target.name]: event.target.value,
         });
     };
 
+    handleDelete () {
+        const { id, name, date, time, location, color } = this.state;
+        const { onDelete } = this.props;
+        deleteReminder(id)
+            .subscribe(() => {
+                onDelete({ id, name, date, time, location, color });
+            })
+    };
+
     render() {
 
         const { name, date, time, location, color } = this.state;
         const { open } = this.props;
+        const reminder = { location, date };
 
         return (
             <Dialog onClose={this.handleClose} open={open}>
@@ -120,6 +121,8 @@ export class EditReminder extends Component {
                             </Grid>
 
                         </Stack>
+
+                        <ReminderWeatherInfo reminder={reminder} />
 
                     </DialogContent>
                     <DialogActions>

@@ -2,6 +2,7 @@ import { Button, DialogActions, DialogContent, DialogTitle, FormControl, FormHel
 import Dialog from '@mui/material/Dialog';
 import { Component } from 'react';
 import { addReminder } from '../../services/reminder.service';
+import { ReminderWeatherInfo } from '../reminder-weather-info/reminder-weather-info.component';
 
 export class AddReminder extends Component {
 
@@ -24,19 +25,18 @@ export class AddReminder extends Component {
         };
     }
 
-    handleClose = () => {
-        const { onClose } = this.props;
-        onClose();
-    };
+    componentDidMount() {
+        const { reminder } = this.props;
+        if (reminder) {
+            const { name, date, time, location, color } = reminder;
 
-    handleChange = (event) => {
-        this.setState({
-            ...this.state,
-            [event.target.name]: event.target.value,
-        });
-    };
+            this.setState({
+                name, date, time, location, color
+            });
+        }
+    }
 
-    handleSubmit = (event) => {
+    handleSubmit(event) {
         const { name, date, time, location, color } = this.state;
         const { onClose } = this.props;
 
@@ -47,9 +47,22 @@ export class AddReminder extends Component {
             })
     };
 
+    handleClose() {
+        const { onClose } = this.props;
+        onClose();
+    };
+
+    handleChange(event) {
+        this.setState({
+            ...this.state,
+            [event.target.name]: event.target.value,
+        });
+    };
+
     render() {
         const { name, date, time, location, color } = this.state;
         const { open } = this.props;
+        const reminder = { location, date };
 
         return (
             <Dialog onClose={this.handleClose} open={open}>
@@ -98,6 +111,8 @@ export class AddReminder extends Component {
                             </Grid>
 
                         </Stack>
+
+                        <ReminderWeatherInfo reminder={reminder} />
 
                     </DialogContent>
                     <DialogActions>

@@ -19,19 +19,19 @@ export class Calendar extends Component {
 
     }
 
-    setCalendarDate = () => {
+    setCalendarDate () {
         this.setState({
             currentMonth: this.targetDate.getMonth(),
             currentFullYear: this.targetDate.getFullYear(),
         })
     }
 
-    goNextMonth = () => {
+    goNextMonth () {
         this.targetDate.setMonth(this.targetDate.getMonth() + 1);
         this.setCalendarDate();
     }
 
-    goPreviousMonth = () => {
+    goPreviousMonth () {
         this.targetDate.setMonth(this.targetDate.getMonth() - 1);
         this.setCalendarDate();
     }
