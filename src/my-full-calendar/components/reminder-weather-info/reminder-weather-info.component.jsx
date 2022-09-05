@@ -22,7 +22,7 @@ export class ReminderWeatherInfo extends Component {
     loadForecast() {
         const { reminder } = this.props
 
-        this.abort();
+        this.abortController?.abort();
 
         if (reminder?.location) {
 
@@ -42,23 +42,19 @@ export class ReminderWeatherInfo extends Component {
 
     componentDidUpdate(prevProps) {
         // Typical usage (don't forget to compare props):
-        if (this.props.reminder.location !== prevProps.reminder.location) {
+        if (this.props.reminder.location !== prevProps.reminder.location 
+            || this.props.reminder.date !== prevProps.reminder.date) {
             this.loadForecast();
         }
     }
 
     componentWillUnmount() {
-        this.abort();
-    }
-
-    abort() {
         this.abortController?.abort();
-        this.abortController = null;
     }
 
     render() {
         const { forecast } = this.state;
-        let weather = this.abortController ? 'Loading weather info' : 'No Weather Info';
+        let weather = '';
 
         if (forecast && forecast.main) {
             weather += `${forecast.main ? forecast.main?.temp + ' °C.' : ''}`;
@@ -66,6 +62,8 @@ export class ReminderWeatherInfo extends Component {
             if (forecast.main && forecast.main.temp_min && forecast.main.temp_max) {
                 weather += ` Min ${forecast.main.temp_min} °C, Max ${forecast.main.temp_max} °C`;
             }
+        } else {
+            weather = 'No weather info available'
         }
 
         return (

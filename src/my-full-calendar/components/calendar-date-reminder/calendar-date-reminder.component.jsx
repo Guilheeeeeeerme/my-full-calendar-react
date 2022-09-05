@@ -8,9 +8,10 @@ export class CalendarDateReminder extends Component {
 
         return (
             <div className="CalendarDateReminderContainer"
+                style={{ color: reminder.color }}
                 onClick={onSelectReminder}
                 key={reminder.id}>
-                {reminder.time} - {reminder.name} - <ReminderWeatherInfo reminder={reminder} />
+                {reminder.time} - {reminder.name}
             </div>
         )
     }

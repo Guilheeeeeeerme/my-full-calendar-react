@@ -1,6 +1,7 @@
 import { Button, DialogActions, DialogContent, DialogTitle, FormControl, FormHelperText, Grid, Stack, TextField } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import { Component } from 'react';
+import { GithubPicker } from 'react-color';
 import { addReminder } from '../../services/reminder.service';
 import { ReminderWeatherInfo } from '../reminder-weather-info/reminder-weather-info.component';
 
@@ -59,6 +60,13 @@ export class AddReminder extends Component {
         });
     };
 
+    handleColorChange = (event) => {
+        this.setState({
+            ...this.state,
+            color: event.hex,
+        });
+    };
+
     render() {
         const { name, date, time, location, color } = this.state;
         const { open } = this.props;
@@ -80,39 +88,41 @@ export class AddReminder extends Component {
                                 <FormHelperText id="reminder-helper-text">Remind me about this.</FormHelperText>
                             </FormControl>
 
-                            <TextField id="date-input" aria-describedby="Reminder Date" margin='dense'
-                                value={date} name='date' type="date" label="Fate"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                inputProps={{ ...this.inputProps.date }}
-                                onChange={(e) => { this.handleChange(e) }} />
-
-                            <TextField id="time-input" aria-describedby="Reminder Time" margin='dense'
-                                value={time} name='time' type="time" label="Time"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                inputProps={{ ...this.inputProps.time }}
-                                onChange={(e) => { this.handleChange(e) }} />
-
                             <Grid>
 
-                                <TextField id="location-input" aria-describedby="Reminder Location" margin='dense'
-                                    value={location} name='location' label="Location"
-                                    inputProps={{ ...this.inputProps.location }}
+                                <TextField id="date-input" aria-describedby="Reminder Date" margin='dense'
+                                    value={date} name='date' type="date" label="Date"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    inputProps={{ ...this.inputProps.date }}
                                     onChange={(e) => { this.handleChange(e) }} />
 
-                                <TextField id="color-input" aria-describedby="Reminder Color" margin='dense'
-                                    value={color} name='color' label="Color"
-                                    inputProps={{ ...this.inputProps.color }}
+                                <TextField id="time-input" aria-describedby="Reminder Time" margin='dense'
+                                    value={time} name='time' type="time" label="Time"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    inputProps={{ ...this.inputProps.time }}
                                     onChange={(e) => { this.handleChange(e) }} />
 
                             </Grid>
 
+                            <TextField id="location-input" aria-describedby="Reminder Location" margin='dense'
+                                value={location} name='location' label="Location"
+                                inputProps={{ ...this.inputProps.location }}
+                                onChange={(e) => { this.handleChange(e) }} />
+
+                            <ReminderWeatherInfo reminder={reminder} />
+
+                            <GithubPicker id="color-input" aria-describedby="Reminder Color" margin='dense'
+                                value={color} name='color' label="Color"
+                                inputProps={{ ...this.inputProps.color }}
+                                onChange={(e) => { this.handleColorChange(e) }} />
+
+
                         </Stack>
 
-                        <ReminderWeatherInfo reminder={reminder} />
 
                     </DialogContent>
                     <DialogActions>
