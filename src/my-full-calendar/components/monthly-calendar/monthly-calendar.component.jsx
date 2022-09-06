@@ -20,6 +20,7 @@ export class MonthlyCalendar extends Component {
 
         this.state = {
             openAddReminderDialog: false,
+            mockOpenDialogReminderTemplate: null,
             datesInMonth: [],
             monthLabel: ''
         }
@@ -82,8 +83,23 @@ export class MonthlyCalendar extends Component {
     }
 
     setOpenAddReminder = (openAddReminderDialog) => {
+
+        let now = new Date();
+        const { month, year } = this.props;
+
+        now.setMonth(month);
+        now.setFullYear(year);
+        now.setHours(now.getHours() + 1);
+
+        const date = moment(now).format('YYYY-MM-DD');
+        const time = moment(now).format('HH:mm');
+
         this.setState({
-            openAddReminderDialog: openAddReminderDialog
+            openAddReminderDialog: openAddReminderDialog,
+            mockOpenDialogReminderTemplate: {
+                date,
+                time
+            }
         })
     }
 
@@ -108,7 +124,7 @@ export class MonthlyCalendar extends Component {
     }
 
     render() {
-        const { monthLabel, datesInMonth, openAddReminderDialog } = this.state;
+        const { monthLabel, datesInMonth, openAddReminderDialog, mockOpenDialogReminderTemplate } = this.state;
 
         return (
             <div className="MyFullCalendarMonthlyCalendarContainer">
@@ -145,6 +161,7 @@ export class MonthlyCalendar extends Component {
                 {
                     openAddReminderDialog && (<AddReminder
                         open={openAddReminderDialog}
+                        reminder={mockOpenDialogReminderTemplate}
                         onClose={this.onCloseAddReminder} />)
                 }
 

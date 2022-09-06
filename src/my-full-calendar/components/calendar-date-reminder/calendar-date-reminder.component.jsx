@@ -11,15 +11,13 @@ export class CalendarDateReminder extends Component {
         const isSimpleMode = !showWeather && !showLocation;
 
         const chipLabel = `${reminder.time} - ${reminder.name}`
-        const customStyle = reminder?.color
-            ? { backgroundColor: reminder?.color, mixBlendMode: 'difference' }
-            : {}
+
 
         return isSimpleMode
             ? (
                 <div className="CalendarDateReminderContainer" >
                     <Chip className="CalendarDateReminderValue"
-                        style={customStyle}
+                        style={reminder ? { backgroundColor: reminder.color } : {}}
                         onClick={onSelectReminder} clickable
                         key={reminder.id}
                         label={chipLabel}
@@ -28,16 +26,19 @@ export class CalendarDateReminder extends Component {
             ) : (
                 <Card sx={{ minWidth: 275 }}>
                     <CardContent>
-                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                        <Typography sx={{ fontSize: 14 }} color="text.secondary"
+                            style={reminder ? { color: reminder.color } : {}}
+                            gutterBottom>
                             {reminder.name}
                         </Typography>
 
                         <Typography variant="h5" component="div">
                             {reminder.time}
                         </Typography>
-
-                        {showLocation && (<Typography sx={{ mb: 1.5 }} color="text.secondary"> {reminder.location} </Typography>)}
-                        {showWeather && (<ReminderWeatherInfo reminder={reminder} />)}
+                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                            {showLocation && reminder.location}
+                            {showWeather && (<ReminderWeatherInfo reminder={reminder} />)}
+                        </Typography>
 
                         <Typography variant="body2">
                             {reminder.description}

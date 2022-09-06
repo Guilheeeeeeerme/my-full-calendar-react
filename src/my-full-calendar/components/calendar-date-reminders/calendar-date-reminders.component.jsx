@@ -12,10 +12,9 @@ export class CalendarDateReminders extends Component {
             <div className="CalendarDateRemindersContainer">
                 <Grid container spacing={isSimpleMode ? 0 : 4}>
                     {reminders.map(reminder => (
-                        <Grid item md={isSimpleMode ? 12 : 6}>
+                        <Grid item md={isSimpleMode ? 12 : 6} key={reminder.id}>
                             <CalendarDateReminder
                                 className="CalendarDateRemindersValue"
-                                key={reminder.id}
                                 reminder={reminder}
                                 showWeather={showWeather}
                                 showLocation={showLocation}
