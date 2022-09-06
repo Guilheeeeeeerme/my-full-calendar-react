@@ -2,11 +2,14 @@ import AddIcon from '@mui/icons-material/Add';
 import { Button } from "@mui/material";
 import moment from "moment";
 import React, { Component } from 'react';
+import { Subject } from 'rxjs';
 import { AddReminder } from "../add-reminder/add-reminder.component";
 import { CalendarDate } from "../calendar-date/calendar-date.component";
 import './monthly-calendar.styles.scss';
 
 export class MonthlyCalendar extends Component {
+
+    onReminderEdited$ = new Subject();
 
     weekDays = [
         'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
@@ -16,7 +19,7 @@ export class MonthlyCalendar extends Component {
         super();
 
         this.state = {
-            openAddReminder: false,
+            openAddReminderDialog: false,
             datesInMonth: [],
             monthLabel: ''
         }
@@ -75,12 +78,12 @@ export class MonthlyCalendar extends Component {
             monthLabel: monthLabel,
         })
 
-
+        
     }
 
-    setOpenAddReminder = (openAddReminder) => {
+    setOpenAddReminder = (openAddReminderDialog) => {
         this.setState({
-            openAddReminder: openAddReminder
+            openAddReminderDialog: openAddReminderDialog
         })
     }
 
@@ -92,18 +95,9 @@ export class MonthlyCalendar extends Component {
         this.setOpenAddReminder(false);
     };
 
-    onReminderDeleted = () => {
-        this.forceUpdate();
+    reminderEdited = (reminder) => {
+        this.onReminderEdited$.next(reminder);
     }
-
-    onReminderAdded = () => {
-        this.forceUpdate();
-    }
-
-    onReminderEdited = () => {
-        this.forceUpdate();
-    }
-
 
     getKey = (dateInMonth) => {
         return [
@@ -114,7 +108,7 @@ export class MonthlyCalendar extends Component {
     }
 
     render() {
-        const { monthLabel, datesInMonth, openAddReminder } = this.state;
+        const { monthLabel, datesInMonth, openAddReminderDialog } = this.state;
 
         return (
             <div className="MyFullCalendarMonthlyCalendarContainer">
@@ -141,17 +135,16 @@ export class MonthlyCalendar extends Component {
                             weekday={dateInMonth.weekday}
                             month={dateInMonth.month}
                             year={dateInMonth.year}
-
-                            onReminderDeleted={this.onReminderDeleted}
-                            onReminderAdded={this.onReminderAdded}
-                            onReminderEdited={this.onReminderEdited}
+                            maxReminders={3}
+                            onReminderEditedListener={this.onReminderEdited$}
+                            onEditReminder={this.reminderEdited}
                         />
                     ))}
                 </div>
 
                 {
-                    openAddReminder && (<AddReminder
-                        open={openAddReminder}
+                    openAddReminderDialog && (<AddReminder
+                        open={openAddReminderDialog}
                         onClose={this.onCloseAddReminder} />)
                 }
 

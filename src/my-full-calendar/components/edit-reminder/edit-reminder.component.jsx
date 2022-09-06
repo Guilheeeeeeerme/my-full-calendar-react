@@ -1,8 +1,8 @@
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Button, DialogActions, DialogContent, DialogTitle, FormControl, FormHelperText, Grid, Stack, TextField } from '@mui/material';
+import { Button, DialogActions, DialogContent, DialogTitle, Stack, TextField } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import { Component } from 'react';
-import { GithubPicker } from 'react-color';
+import { CirclePicker } from 'react-color';
 import { deleteReminder, updateReminder } from '../../services/reminder.service';
 import { ReminderWeatherInfo } from '../reminder-weather-info/reminder-weather-info.component';
 
@@ -33,7 +33,12 @@ export class EditReminder extends Component {
         const { id, name, date, time, location, color } = reminder;
 
         this.setState({
-            id, name, date, time, location, color
+            id: id ?? '',
+            name: name ?? '',
+            date: date ?? '',
+            time: time ?? '',
+            location: location ?? '',
+            color: color ?? ''
         });
     }
 
@@ -83,34 +88,28 @@ export class EditReminder extends Component {
         const reminder = { location, date };
 
         return (
-            <Dialog onClose={this.handleClose} open={open}>
+            <Dialog onClose={this.handleClose} open={open} fullWidth>
                 <form noValidate onSubmit={this.handleSubmit}>
                     <DialogTitle>Update Reminder</DialogTitle>
                     <DialogContent>
 
-                        <Stack spacing={4} >
+                        <Stack spacing={1} >
 
-                            <FormControl margin='dense'>
-                                <TextField id="reminder-input" aria-describedby="Reminder Name"
-                                    value={name} name='name' label="Reminder"
-                                    inputProps={{ ...this.inputProps.name }}
-                                    onChange={(e) => { this.handleChange(e) }} />
-                                <FormHelperText id="reminder-helper-text">Remind me about this.</FormHelperText>
-                            </FormControl>
+                            <TextField id="reminder-input" aria-describedby="Reminder Name" margin='dense'
+                                value={name} name='name' label="Reminder"
+                                inputProps={{ ...this.inputProps.name }}
+                                onChange={(e) => { this.handleChange(e) }}
+                                helperText="Remind me about this." />
 
                             <TextField id="date-input" aria-describedby="Reminder Date" margin='dense'
-                                value={date} name='date' type="date" label="Date"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
+                                value={date} name='date' label="Date" type="date"
+                                InputLabelProps={{ shrink: true }}
                                 inputProps={{ ...this.inputProps.date }}
                                 onChange={(e) => { this.handleChange(e) }} />
 
                             <TextField id="time-input" aria-describedby="Reminder Time" margin='dense'
-                                value={time} name='time' type="time" label="Time"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
+                                value={time} name='time' label="Time" type="time"
+                                InputLabelProps={{ shrink: true }}
                                 inputProps={{ ...this.inputProps.time }}
                                 onChange={(e) => { this.handleChange(e) }} />
 
@@ -121,11 +120,10 @@ export class EditReminder extends Component {
 
                             <ReminderWeatherInfo reminder={reminder} />
 
-                            <GithubPicker id="color-input" aria-describedby="Reminder Color" margin='dense'
-                                value={color} name='color' label="Color"
+                            <CirclePicker id="color-input" aria-describedby="Reminder Color" margin='dense'
+                                color={color} name='color' label="Color"
                                 inputProps={{ ...this.inputProps.color }}
                                 onChange={(e) => { this.handleColorChange(e) }} />
-
 
                         </Stack>
 
