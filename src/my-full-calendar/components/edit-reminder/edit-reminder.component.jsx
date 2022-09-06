@@ -140,7 +140,6 @@ export class EditReminder extends Component {
                                 inputProps={{ ...this.inputProps.description }}
                                 onChange={(e) => { this.handleChange(e) }} />
 
-
                             <TextField id="location-input" aria-describedby="Reminder Location" margin='dense'
                                 value={location} name='location' label="Location"
                                 inputProps={{ ...this.inputProps.location }}
