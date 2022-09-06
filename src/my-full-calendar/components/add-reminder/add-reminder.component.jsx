@@ -125,14 +125,14 @@ export class AddReminder extends Component {
                                 </Grid>
                             </Grid>
 
-                            <TextField id="location-input" aria-describedby="Reminder Location" margin='dense'
-                                value={location} name='location' label="Location"
-                                inputProps={{ ...this.inputProps.location }}
-                                onChange={(e) => { this.handleChange(e) }} />
-
                             <TextField multiline minRows={3} id="description-input" aria-describedby="Reminder Description" margin='dense'
                                 value={description} name='description' label="Description"
                                 inputProps={{ ...this.inputProps.description }}
+                                onChange={(e) => { this.handleChange(e) }} />
+
+                            <TextField id="location-input" aria-describedby="Reminder Location" margin='dense'
+                                value={location} name='location' label="Location"
+                                inputProps={{ ...this.inputProps.location }}
                                 onChange={(e) => { this.handleChange(e) }} />
 
                             <ReminderWeatherInfo reminder={reminder} />
